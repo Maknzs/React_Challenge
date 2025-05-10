@@ -1,0 +1,18 @@
+/* Grid display for multiple posts, dynamically adjusts to screen size */
+.blogPostList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1199px) {
+  .blogPostList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 769px) {
+  .blogPostList {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
