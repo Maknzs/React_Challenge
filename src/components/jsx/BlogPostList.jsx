@@ -4,17 +4,20 @@ import BlogPostItem from "./BlogPostItem";
 
 function BlogPostList({ posts }) {
   return (
-    <div className={styles.blogPostList}>
-      {posts.map((post) => (
-        <BlogPostItem
-          key={post.id}
-          id={post.id}
-          title={post.title}
-          summary={post.summary}
-          date={post.date}
-          url={post.url}
-        />
-      ))}
+    <div className={styles.container}>
+      <h1 className={styles.title}>Blog Posts</h1>
+      <div className={styles.blogPostList}>
+        {posts.map((post) => (
+          <BlogPostItem
+            key={post.id}
+            id={post.id}
+            title={post.title}
+            summary={post.summary}
+            date={post.date}
+            url={post.url}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,8 @@
 // src/App.jsx
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import BlogPostList from "./components/jsx/BlogPostList";
-import "./App.css";
+// import "./App.css"; NOT CURRENTLY IN USE
 
 const sampleData = [
   {
@@ -82,10 +83,9 @@ const sampleData = [
 
 function App() {
   return (
-    <div className="container">
-      <h1 className="title">Blog Posts</h1>
-      <BlogPostList posts={sampleData} />
-    </div>
+    <Routes>
+      <Route path="/" element={<BlogPostList posts={sampleData} />} />
+    </Routes>
   );
 }
 

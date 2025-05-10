@@ -1,4 +1,14 @@
 /* Grid display for multiple posts, dynamically adjusts to screen size */
+.container {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 100px;
+}
+
+.title {
+  font-size: 3rem;
+  color: #333333;
+}
 .blogPostList {
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));

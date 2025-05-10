@@ -17,6 +17,7 @@
 .title {
   font-size: 24px;
   font-weight: bold;
+  text-decoration: none;
   color: #333333;
   margin: 0 0 0.5rem;
   transition: color 0.3s ease;

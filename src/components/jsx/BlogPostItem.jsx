@@ -7,7 +7,9 @@ function BlogPostItem({ title, summary, date, url }) {
 
   return (
     <div className={styles.blogPostItem}>
-      <h2 className={styles.title}>{title}</h2>
+      <Link to={url} className={styles.title}>
+        <h2>{title}</h2>
+      </Link>
       <p className={styles.summary}>{summary}</p>
       <p className={styles.date}>Published on {formattedDate}</p>
     </div>
