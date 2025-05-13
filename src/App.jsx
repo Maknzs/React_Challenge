@@ -1,92 +1,73 @@
-// src/App.jsx
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import BlogPostList from "./components/jsx/BlogPostList";
-// import "./App.css"; NOT CURRENTLY IN USE
 
-const sampleData = [
+import BlogPostList from "./components/BlogPostList/BlogPostList";
+
+const samplePosts = [
   {
     id: "1",
     title: "Getting Started with React",
     summary: "Learn the basics of React and build your first application.",
     date: "2023-01-01",
     url: "/posts/1",
+    content: `
+      <p>React is a JavaScript library for building user interfaces. It's maintained by Facebook and a community of developers.</p>
+      <h2>Why React?</h2>
+      <p>React makes it easy to create interactive UIs. It efficiently updates and renders just the right components when your data changes.</p>
+      <ul>
+        <li>Component-based</li>
+        <li>Declarative</li>
+        <li>Learn Once, Write Anywhere</li>
+      </ul>
+    `,
+    author: "John Doe",
   },
   {
     id: "2",
-    title: "Understanding React Hooks",
-    summary:
-      "Dive into useState, useEffect, and custom hooks to level up your React skills.",
-    date: "2023-01-15",
+    title: "CSS Grid vs. Flexbox",
+    summary: "A comparison of two powerful layout systems in CSS.",
+    date: "2023-02-15",
     url: "/posts/2",
+    content: `
+      <p>Both CSS Grid and Flexbox are modern layout systems. Choosing the right one depends on your layout needs.</p>
+      <h2>CSS Grid</h2>
+      <p>Best for two-dimensional layouts (rows and columns).</p>
+      <h2>Flexbox</h2>
+      <p>Best for one-dimensional layouts (rows <strong>or</strong> columns).</p>
+      <ol>
+        <li>Use Grid when you need a full page layout.</li>
+        <li>Use Flexbox when you're aligning items in a single row or column.</li>
+      </ol>
+    `,
+    author: "Jane Smith",
   },
   {
     id: "3",
-    title: "React Router Deep Dive",
-    summary: "Master routing and navigation in single-page React apps.",
-    date: "2023-02-05",
-    url: "/posts/3",
-  },
-  {
-    id: "4",
-    title: "Building Forms in React",
-    summary: "Techniques for managing form state, validation, and submission.",
-    date: "2023-02-20",
-    url: "/posts/4",
-  },
-  {
-    id: "5",
-    title: "State Management with Redux",
-    summary: "Understand the Redux pattern and how to integrate it with React.",
+    title: "Accessibility in Web Development",
+    summary: "Tips for making your web applications more accessible.",
     date: "2023-03-10",
-    url: "/posts/5",
-  },
-  {
-    id: "6",
-    title: "Optimizing React Performance",
-    summary: "Tips and tools to make your React apps run faster and smoother.",
-    date: "2023-03-25",
-    url: "/posts/6",
-  },
-  {
-    id: "7",
-    title: "Deploying React Applications",
-    summary:
-      "Learn various deployment strategies including Vercel, Netlify, and traditional hosting.",
-    date: "2023-04-05",
-    url: "/posts/7",
-  },
-  {
-    id: "8",
-    title: "Testing React Components",
-    summary:
-      "Use tools like Jest and React Testing Library to write robust tests.",
-    date: "2023-04-20",
-    url: "/posts/8",
-  },
-  {
-    id: "9",
-    title: "Using Context API in React",
-    summary: "Simplify state sharing with the React Context API.",
-    date: "2023-05-01",
-    url: "/posts/9",
-  },
-  {
-    id: "10",
-    title: "React and TypeScript",
-    summary:
-      "Combine TypeScript with React for better developer experience and type safety.",
-    date: "2023-05-15",
-    url: "/posts/10",
+    url: "/posts/3",
+    content: `
+      <p>Accessibility ensures that websites are usable by everyone, including people with disabilities.</p>
+      <h2>Best Practices</h2>
+      <ul>
+        <li>Use semantic HTML</li>
+        <li>Provide alt text for all meaningful images</li>
+        <li>Ensure sufficient color contrast</li>
+        <li>Use ARIA roles where appropriate</li>
+      </ul>
+    `,
+    author: "Alex Johnson",
   },
 ];
 
-function App() {
+const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<BlogPostList posts={sampleData} />} />
-    </Routes>
+    <div>
+      <h1>Blog Posts</h1>
+
+      <BlogPostList posts={samplePosts} />
+    </div>
   );
-}
+};
 
 export default App;

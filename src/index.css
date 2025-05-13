@@ -12,3 +12,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+h1 {
+  text-align: center;   /* center alignment */
+  color: black;         /* text color */
+  font-size: 2.5rem;    /* optional: make it look better */
+  margin-top: 50px;     /* optional spacing */
+}
+
+
