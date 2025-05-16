@@ -1,6 +1,14 @@
 import React from "react";
-
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Routes,
+  Route,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import BlogPostList from "./components/BlogPostList/BlogPostList";
+import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
 
 const samplePosts = [
   {
@@ -60,13 +68,41 @@ const samplePosts = [
   },
 ];
 
+const PostsPage = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (postId) => {
+    navigate(`/posts/${postId}`);
+  };
+  return <BlogPostList posts={samplePosts} onSelect={handleClick} />;
+};
+
+const PostDetailPage = () => {
+  const { id } = useParams();
+  const post = samplePosts.find((post) => post.id === id);
+
+  return (
+    <BlogPostDetail
+      title={post.title}
+      content={post.content}
+      author={post.author}
+      date={post.date}
+    />
+  );
+};
+
 const App = () => {
   return (
-    <div>
-      <h1>Blog Posts</h1>
-
-      <BlogPostList posts={samplePosts} />
-    </div>
+    <Router>
+      <div>
+        <h1 className="title">Blog Posts</h1>
+        <Routes>
+          <Route path="/posts" element={<PostsPage />} />
+          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="*" element={<Navigate to="/posts" replace />} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
