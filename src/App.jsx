@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
-  Navigate,
   Routes,
   Route,
+  Navigate,
   useParams,
   useNavigate,
 } from "react-router-dom";
 import BlogPostList from "./components/BlogPostList/BlogPostList";
 import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
+import BlogPostForm from "./components/BlogPostForm/BlogPostForm";
 
+// Sample post data
 const samplePosts = [
   {
     id: "1",
@@ -68,37 +70,148 @@ const samplePosts = [
   },
 ];
 
-const PostsPage = () => {
-  const navigate = useNavigate();
-
-  const handleClick = (postId) => {
-    navigate(`/posts/${postId}`);
-  };
-  return <BlogPostList posts={samplePosts} onSelect={handleClick} />;
+const stripHTML = (html) => {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
 };
 
-const PostDetailPage = () => {
-  const { id } = useParams();
-  const post = samplePosts.find((post) => post.id === id);
+// Blog list page with navigation
+const PostsPage = ({ posts }) => {
+  const navigate = useNavigate();
 
   return (
-    <BlogPostDetail
-      title={post.title}
-      content={post.content}
-      author={post.author}
-      date={post.date}
-    />
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Blog Posts</h2>
+        <button
+          onClick={() => navigate("/posts/new")}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "14px",
+            cursor: "pointer",
+            marginRight: "40px",
+          }}
+        >
+          + New Post
+        </button>
+      </div>
+
+      <BlogPostList posts={posts} onSelect={(id) => navigate(`/posts/${id}`)} />
+    </div>
   );
 };
 
+// Blog detail page
+const PostPage = ({ posts }) => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const post = posts.find((p) => p.id === id);
+
+  if (!post) {
+    return <p>Blog post not found.</p>;
+  }
+
+  return (
+    <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
+      <button
+        onClick={() => navigate(`/posts/${id}/edit`)}
+        style={{
+          position: "absolute",
+          top: "10px",
+          right: "10px",
+          padding: "10px 15px",
+          fontSize: "14px",
+          marginRight: "40px",
+          marginTop: "20px",
+          backgroundColor: "#007BFF",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Edit Post
+      </button>
+
+      <BlogPostDetail {...post} />
+    </div>
+  );
+};
+
+const CreatePost = ({ onCreate }) => {
+  const navigate = useNavigate();
+  const handleSubmit = (data) => {
+    onCreate(data);
+    navigate("/posts");
+  };
+  return <BlogPostForm onSubmit={handleSubmit} />;
+};
+
+const UpdatePost = ({ posts, onUpdate }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const post = posts.find((p) => p.id === id);
+
+  if (!post) {
+    return <p>Blog post not found.</p>;
+  }
+
+  const handleSubmit = (data) => {
+    onUpdate(id, data);
+    navigate(`/posts/${id}`);
+  };
+  return <BlogPostForm post={post} onSubmit={handleSubmit} />;
+};
+
+// App component with routing
 const App = () => {
+  const [posts, setPosts] = useState(samplePosts);
+
+  const handleCreatePost = (newPost) => {
+    const newId = (posts.length + 1).toString();
+    const summary = stripHTML(newPost.content).slice(0, 60) + "...";
+    setPosts([...posts, { ...newPost, id: newId, summary }]);
+  };
+
+  const handleUpdatePost = (id, updatedPost) => {
+    const updatedPosts = posts.map((p) =>
+      p.id === id
+        ? {
+            ...p,
+            ...updatedPost,
+            sumamry: stripHTML(updatedPost.content).slice(0, 60) + "...",
+          }
+        : p
+    );
+    setPosts(updatedPosts);
+  };
   return (
     <Router>
       <div>
-        <h1 className="title">Blog Posts</h1>
+        <h1>Blog Posts</h1>
         <Routes>
-          <Route path="/posts" element={<PostsPage />} />
-          <Route path="/posts/:id" element={<PostDetailPage />} />
+          <Route path="/posts" element={<PostsPage posts={posts} />} />
+          <Route
+            path="/posts/new"
+            element={<CreatePost onCreate={handleCreatePost} />}
+          />
+          <Route path="/posts/:id" element={<PostPage posts={posts} />} />
+          <Route
+            path="/posts/:id/edit"
+            element={<UpdatePost posts={posts} onUpdate={handleUpdatePost} />}
+          />
           <Route path="*" element={<Navigate to="/posts" replace />} />
         </Routes>
       </div>

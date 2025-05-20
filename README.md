@@ -6,6 +6,10 @@ In this challenge, you will create the components to display a list of blog post
 *Description:*
 Develop components to display the full content of an individual blog post, including title, content, author, and date, ensuring the layout is responsive across devices.
 
+# Challenge 3: Implement Search Functionality
+*Description:*
+Add a search bar to the blogging platform, allowing users to search for posts by title or content. The search feature should filter posts dynamically and be usable across devices.
+
 ## Steps to Run
 1. Visit the official Node.js website: https://nodejs.org
 2. Download the installer for your operating system (Windows, macOS, Linux) and follow the installation steps

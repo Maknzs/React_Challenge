@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import BlogPostList from '../components/BlogPostList/BlogPostList';
 
 describe('BlogPostList', () => {
@@ -32,5 +32,16 @@ describe('BlogPostList', () => {
   test('does not render no posts message when posts exist', () => {
     render(<BlogPostList posts={samplePosts} />);
     expect(screen.queryByText(/No blog posts available/i)).not.toBeInTheDocument();
+  });
+
+  test('calls onSelect when a post title is clicked', () => {
+    const onSelectMock = jest.fn();
+    render(<BlogPostList posts={samplePosts} onSelect={onSelectMock} />);
+
+    const firstTitleWrapper = screen.getByText('First Post').parentElement;
+    fireEvent.click(firstTitleWrapper);
+
+    expect(onSelectMock).toHaveBeenCalledTimes(1);
+    expect(onSelectMock).toHaveBeenCalledWith('1');
   });
 });

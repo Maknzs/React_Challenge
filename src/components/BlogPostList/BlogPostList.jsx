@@ -1,4 +1,3 @@
-// BlogPostList.jsx
 import React from "react";
 import BlogPostItem from "../BlogPostItem/BlogPostItem";
 import styles from "./BlogPostList.module.css";
@@ -17,7 +16,6 @@ const BlogPostList = ({ posts, onSelect }) => {
           title={post.title}
           summary={post.summary}
           date={post.date}
-          url={post.url}
           onSelect={onSelect}
         />
       ))}

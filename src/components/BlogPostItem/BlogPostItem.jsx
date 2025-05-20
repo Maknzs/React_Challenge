@@ -1,10 +1,8 @@
-// BlogPostItem.jsx
 import React from "react";
 import styles from "./BlogPostItem.module.css";
 
 const BlogPostItem = ({ id, title, summary, date, onSelect }) => {
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
-    timeZone: "UTC",
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -12,7 +10,11 @@ const BlogPostItem = ({ id, title, summary, date, onSelect }) => {
 
   return (
     <div className={styles.blogPostItem}>
-      <div className={styles.postTitle} onClick={() => onSelect(id)}>
+      <div
+        className={styles.postTitle}
+        onClick={() => onSelect && onSelect(id)}
+        style={{ cursor: "pointer" }}
+      >
         <h2>{title}</h2>
       </div>
       <p className={styles.summary}>{summary}</p>

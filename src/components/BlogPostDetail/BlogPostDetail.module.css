@@ -1,24 +1,14 @@
-* {
-  font-family: Arial, sans-serif;
-}
-
-.noPost {
-  font-size: 1.5rem;
-  text-align: center;
-  color: #b00;
-  margin-top: 2rem;
-}
-
 .blogPostDetail {
   max-width: 800px;
   margin: 0 auto;
   background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(43, 42, 42, 0.05);
   padding: 40px;
-  border: #333333;
-  box-shadow: 0 2px 8px #666666;
-  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  color: #8a7878;
 }
 
+/* Title */
 .title {
   font-size: 36px;
   font-weight: bold;
@@ -26,24 +16,28 @@
   margin-bottom: 20px;
 }
 
+/* Author */
 .author {
   font-size: 18px;
   color: #666666;
   margin-bottom: 10px;
 }
 
+/* Date */
 .date {
   font-size: 16px;
   color: #999999;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
+/* Content */
 .content {
   font-size: 18px;
-  color: #333333;
   line-height: 1.6;
-  margin-top: 30px;
+  color: #333333;
 }
+
+/* Make links styled and accessible */
 .content a {
   color: #007bff;
   text-decoration: underline;
@@ -53,6 +47,7 @@
   color: #0056b3;
 }
 
+/* Responsive images */
 .content img {
   max-width: 100%;
   height: auto;
@@ -60,6 +55,17 @@
   margin: 20px 0;
 }
 
+/* Not found message */
+.notFound {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: #b00;
+}
+
+/* --------------------------------- */
+/* Mobile View (up to 768px)        */
+/* --------------------------------- */
 @media (max-width: 768px) {
   .blogPostDetail {
     padding: 20px;
@@ -77,12 +83,25 @@
 
   .date {
     font-size: 12px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
   }
 
   .content {
     font-size: 14px;
     line-height: 1.4;
-    margin-top: 20px;
   }
+}
+
+.editPost {
+  background-color: #007bff;
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: none;
+  display: flex;
+  margin-left: auto;
+}
+
+.editPost:hover {
+  cursor: pointer;
 }
