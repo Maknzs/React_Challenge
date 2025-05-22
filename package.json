@@ -13,9 +13,9 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "react": "^19.0.0",
-    "react-date-picker": "^11.0.0",
-    "react-datepicker": "^8.3.0",
+    "react-datepicker": "^8.2.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
     "suneditor": "^2.47.5",

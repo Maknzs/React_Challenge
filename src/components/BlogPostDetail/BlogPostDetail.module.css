@@ -91,17 +91,3 @@
     line-height: 1.4;
   }
 }
-
-.editPost {
-  background-color: #007bff;
-  padding: 8px 15px;
-  border-radius: 5px;
-  border: none;
-  box-shadow: none;
-  display: flex;
-  margin-left: auto;
-}
-
-.editPost:hover {
-  cursor: pointer;
-}

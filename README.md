@@ -10,6 +10,10 @@ Develop components to display the full content of an individual blog post, inclu
 *Description:*
 Add a search bar to the blogging platform, allowing users to search for posts by title or content. The search feature should filter posts dynamically and be usable across devices.
 
+# Challenge 4: Code Review and Collaboration
+*Description:*
+Participate in code reviews and collaborate with peers to improve the quality of the blogging platform’s codebase, focusing on the newly added features.
+
 ## Steps to Run
 1. Visit the official Node.js website: https://nodejs.org
 2. Download the installer for your operating system (Windows, macOS, Linux) and follow the installation steps

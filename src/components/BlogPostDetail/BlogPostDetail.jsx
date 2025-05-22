@@ -17,8 +17,11 @@ const BlogPostDetail = ({ title, content, author, date }) => {
   return (
     <div className={styles.blogPostDetail}>
       <h1 className={styles.title}>{title}</h1>
+
       <p className={styles.author}>By {author}</p>
+
       <p className={styles.date}>Published on {formattedDate}</p>
+
       <div
         className={styles.content}
         dangerouslySetInnerHTML={{ __html: content }}

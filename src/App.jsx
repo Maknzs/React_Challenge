@@ -10,15 +10,16 @@ import {
 import BlogPostList from "./components/BlogPostList/BlogPostList";
 import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
 import BlogPostForm from "./components/BlogPostForm/BlogPostForm";
+import DeleteButton from "./components/DeleteButton/DeleteButton";
+import ConfirmationDialog from "./components/ConfirmationDialog/ConfirmationDialog";
 
-// Sample post data
-const samplePosts = [
+// Sample initial posts
+const initialPosts = [
   {
     id: "1",
     title: "Getting Started with React",
     summary: "Learn the basics of React and build your first application.",
     date: "2023-01-01",
-    url: "/posts/1",
     content: `
       <p>React is a JavaScript library for building user interfaces. It's maintained by Facebook and a community of developers.</p>
       <h2>Why React?</h2>
@@ -36,7 +37,6 @@ const samplePosts = [
     title: "CSS Grid vs. Flexbox",
     summary: "A comparison of two powerful layout systems in CSS.",
     date: "2023-02-15",
-    url: "/posts/2",
     content: `
       <p>Both CSS Grid and Flexbox are modern layout systems. Choosing the right one depends on your layout needs.</p>
       <h2>CSS Grid</h2>
@@ -55,7 +55,6 @@ const samplePosts = [
     title: "Accessibility in Web Development",
     summary: "Tips for making your web applications more accessible.",
     date: "2023-03-10",
-    url: "/posts/3",
     content: `
       <p>Accessibility ensures that websites are usable by everyone, including people with disabilities.</p>
       <h2>Best Practices</h2>
@@ -70,15 +69,25 @@ const samplePosts = [
   },
 ];
 
-const stripHTML = (html) => {
+// Utility to strip HTML and decode entities like &nbsp;
+const stripHtml = (html) => {
   const tmp = document.createElement("div");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
 };
 
-// Blog list page with navigation
-const PostsPage = ({ posts }) => {
+// Posts list page
+const PostsPage = ({ posts, onDeleteAll }) => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openDialogBox = () => setIsOpen(true);
+  const closeDialogBox = () => setIsOpen(false);
+  const confirmDelete = () => {
+    onDeleteAll();
+    navigate("/posts");
+    closeDialogBox();
+  };
 
   return (
     <div>
@@ -109,19 +118,34 @@ const PostsPage = ({ posts }) => {
       </div>
 
       <BlogPostList posts={posts} onSelect={(id) => navigate(`/posts/${id}`)} />
+      <DeleteButton onClick={openDialogBox}>Delete All Posts</DeleteButton>
+      <ConfirmationDialog
+        isOpen={isOpen}
+        onClose={closeDialogBox}
+        onConfirm={confirmDelete}
+        message="Are you sure you want to delete all posts?"
+      >
+        Delete All Posts!
+      </ConfirmationDialog>
     </div>
   );
 };
 
-// Blog detail page
-const PostPage = ({ posts }) => {
-  const navigate = useNavigate();
+// Single post detail page
+const PostPage = ({ posts, onDelete }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const post = posts.find((p) => p.id === id);
 
-  if (!post) {
-    return <p>Blog post not found.</p>;
-  }
+  if (!post) return <p>Blog post not found.</p>;
+
+  const openDialogBox = () => setIsOpen(true);
+  const closeDialogBox = () => setIsOpen(false);
+  const confirmDelete = () => {
+    onDelete(id);
+    navigate("/posts");
+  };
 
   return (
     <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
@@ -146,42 +170,54 @@ const PostPage = ({ posts }) => {
       </button>
 
       <BlogPostDetail {...post} />
+      <DeleteButton onClick={openDialogBox}>Delete</DeleteButton>
+      <ConfirmationDialog
+        isOpen={isOpen}
+        onClose={closeDialogBox}
+        onConfirm={confirmDelete}
+        message="Are you sure you want to delete this post?"
+      >
+        Delete Post
+      </ConfirmationDialog>
     </div>
   );
 };
 
+// Create new post
 const CreatePost = ({ onCreate }) => {
   const navigate = useNavigate();
+
   const handleSubmit = (data) => {
     onCreate(data);
     navigate("/posts");
   };
+
   return <BlogPostForm onSubmit={handleSubmit} />;
 };
 
-const UpdatePost = ({ posts, onUpdate }) => {
+// Edit existing post
+const EditPost = ({ posts, onUpdate }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const post = posts.find((p) => p.id === id);
 
-  if (!post) {
-    return <p>Blog post not found.</p>;
-  }
+  if (!post) return <p>Post not found.</p>;
 
   const handleSubmit = (data) => {
     onUpdate(id, data);
     navigate(`/posts/${id}`);
   };
+
   return <BlogPostForm post={post} onSubmit={handleSubmit} />;
 };
 
-// App component with routing
+// Main App component
 const App = () => {
-  const [posts, setPosts] = useState(samplePosts);
+  const [posts, setPosts] = useState(initialPosts);
 
   const handleCreatePost = (newPost) => {
     const newId = (posts.length + 1).toString();
-    const summary = stripHTML(newPost.content).slice(0, 60) + "...";
+    const summary = stripHtml(newPost.content).slice(0, 60) + "...";
     setPosts([...posts, { ...newPost, id: newId, summary }]);
   };
 
@@ -191,26 +227,43 @@ const App = () => {
         ? {
             ...p,
             ...updatedPost,
-            sumamry: stripHTML(updatedPost.content).slice(0, 60) + "...",
+            summary: stripHtml(updatedPost.content).slice(0, 60) + "...",
           }
         : p
     );
     setPosts(updatedPosts);
   };
+
+  const handleDeletePost = (id) => {
+    setPosts((posts) => posts.filter((p) => p.id !== id));
+  };
+
+  const handleDeleteAllPosts = () => {
+    setPosts([]);
+  };
+
   return (
     <Router>
       <div>
         <h1>Blog Posts</h1>
         <Routes>
-          <Route path="/posts" element={<PostsPage posts={posts} />} />
+          <Route
+            path="/posts"
+            element={
+              <PostsPage posts={posts} onDeleteAll={handleDeleteAllPosts} />
+            }
+          />
           <Route
             path="/posts/new"
             element={<CreatePost onCreate={handleCreatePost} />}
           />
-          <Route path="/posts/:id" element={<PostPage posts={posts} />} />
+          <Route
+            path="/posts/:id"
+            element={<PostPage posts={posts} onDelete={handleDeletePost} />}
+          />
           <Route
             path="/posts/:id/edit"
-            element={<UpdatePost posts={posts} onUpdate={handleUpdatePost} />}
+            element={<EditPost posts={posts} onUpdate={handleUpdatePost} />}
           />
           <Route path="*" element={<Navigate to="/posts" replace />} />
         </Routes>
