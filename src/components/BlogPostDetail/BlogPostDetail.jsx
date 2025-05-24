@@ -7,6 +7,7 @@ const BlogPostDetail = ({ title, content, author, date }) => {
   }
 
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    timeZone: "UTC",
     month: "long",
 
     day: "numeric",

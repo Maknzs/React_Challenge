@@ -12,8 +12,8 @@ import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
 import BlogPostForm from "./components/BlogPostForm/BlogPostForm";
 import DeleteButton from "./components/DeleteButton/DeleteButton";
 import ConfirmationDialog from "./components/ConfirmationDialog/ConfirmationDialog";
+import Layout from "./Layout/Layout";
 
-// Sample initial posts
 const initialPosts = [
   {
     id: "1",
@@ -69,37 +69,23 @@ const initialPosts = [
   },
 ];
 
-// Utility to strip HTML and decode entities like &nbsp;
 const stripHtml = (html) => {
   const tmp = document.createElement("div");
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
 };
 
-// Posts list page
-const PostsPage = ({ posts, onDeleteAll }) => {
+const PostsPage = ({ posts }) => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openDialogBox = () => setIsOpen(true);
-  const closeDialogBox = () => setIsOpen(false);
-  const confirmDelete = () => {
-    onDeleteAll();
-    navigate("/posts");
-    closeDialogBox();
-  };
-
   return (
     <div>
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          justifyContent: "flex-end", // Keeps it aligned to the right
           marginBottom: "20px",
         }}
       >
-        <h2 style={{ margin: 0 }}>Blog Posts</h2>
         <button
           onClick={() => navigate("/posts/new")}
           style={{
@@ -110,7 +96,7 @@ const PostsPage = ({ posts, onDeleteAll }) => {
             borderRadius: "4px",
             fontSize: "14px",
             cursor: "pointer",
-            marginRight: "40px",
+            marginRight: "40px", // Pushes button 40px from the right
           }}
         >
           + New Post
@@ -118,34 +104,23 @@ const PostsPage = ({ posts, onDeleteAll }) => {
       </div>
 
       <BlogPostList posts={posts} onSelect={(id) => navigate(`/posts/${id}`)} />
-      <DeleteButton onClick={openDialogBox}>Delete All Posts</DeleteButton>
-      <ConfirmationDialog
-        isOpen={isOpen}
-        onClose={closeDialogBox}
-        onConfirm={confirmDelete}
-        message="Are you sure you want to delete all posts?"
-      >
-        Delete All Posts!
-      </ConfirmationDialog>
     </div>
   );
 };
 
-// Single post detail page
-const PostPage = ({ posts, onDelete }) => {
+const PostPage = ({ posts, setPosts }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
   const post = posts.find((p) => p.id === id);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  if (!post) return <p>Blog post not found.</p>;
-
-  const openDialogBox = () => setIsOpen(true);
-  const closeDialogBox = () => setIsOpen(false);
-  const confirmDelete = () => {
-    onDelete(id);
+  const handleDelete = () => {
+    const updatedPosts = posts.filter((p) => p.id !== id);
+    setPosts(updatedPosts);
     navigate("/posts");
   };
+
+  if (!post) return <p>Blog post not found.</p>;
 
   return (
     <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
@@ -170,20 +145,20 @@ const PostPage = ({ posts, onDelete }) => {
       </button>
 
       <BlogPostDetail {...post} />
-      <DeleteButton onClick={openDialogBox}>Delete</DeleteButton>
+
+      <div style={{ marginTop: "30px", textAlign: "center" }}>
+        <DeleteButton onClick={() => setIsDialogOpen(true)} />
+      </div>
+
       <ConfirmationDialog
-        isOpen={isOpen}
-        onClose={closeDialogBox}
-        onConfirm={confirmDelete}
-        message="Are you sure you want to delete this post?"
-      >
-        Delete Post
-      </ConfirmationDialog>
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };
 
-// Create new post
 const CreatePost = ({ onCreate }) => {
   const navigate = useNavigate();
 
@@ -195,7 +170,6 @@ const CreatePost = ({ onCreate }) => {
   return <BlogPostForm onSubmit={handleSubmit} />;
 };
 
-// Edit existing post
 const EditPost = ({ posts, onUpdate }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -211,7 +185,6 @@ const EditPost = ({ posts, onUpdate }) => {
   return <BlogPostForm post={post} onSubmit={handleSubmit} />;
 };
 
-// Main App component
 const App = () => {
   const [posts, setPosts] = useState(initialPosts);
 
@@ -234,40 +207,29 @@ const App = () => {
     setPosts(updatedPosts);
   };
 
-  const handleDeletePost = (id) => {
-    setPosts((posts) => posts.filter((p) => p.id !== id));
-  };
-
-  const handleDeleteAllPosts = () => {
-    setPosts([]);
-  };
-
   return (
     <Router>
-      <div>
-        <h1>Blog Posts</h1>
-        <Routes>
-          <Route
-            path="/posts"
-            element={
-              <PostsPage posts={posts} onDeleteAll={handleDeleteAllPosts} />
-            }
-          />
-          <Route
-            path="/posts/new"
-            element={<CreatePost onCreate={handleCreatePost} />}
-          />
-          <Route
-            path="/posts/:id"
-            element={<PostPage posts={posts} onDelete={handleDeletePost} />}
-          />
-          <Route
-            path="/posts/:id/edit"
-            element={<EditPost posts={posts} onUpdate={handleUpdatePost} />}
-          />
-          <Route path="*" element={<Navigate to="/posts" replace />} />
-        </Routes>
-      </div>
+      <Layout>
+        <div>
+          <h1>Blog Posts</h1>
+          <Routes>
+            <Route path="/posts" element={<PostsPage posts={posts} />} />
+            <Route
+              path="/posts/new"
+              element={<CreatePost onCreate={handleCreatePost} />}
+            />
+            <Route
+              path="/posts/:id"
+              element={<PostPage posts={posts} setPosts={setPosts} />}
+            />
+            <Route
+              path="/posts/:id/edit"
+              element={<EditPost posts={posts} onUpdate={handleUpdatePost} />}
+            />
+            <Route path="*" element={<Navigate to="/posts" replace />} />
+          </Routes>
+        </div>
+      </Layout>
     </Router>
   );
 };

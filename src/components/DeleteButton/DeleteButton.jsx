@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./DeleteButton.module.css";
 
-const DeleteButton = ({ onClick, children }) => {
+const DeleteButton = ({ onClick }) => {
   return (
     <button className={styles.deleteButton} onClick={onClick}>
-      {children}
+      Delete
     </button>
   );
 };

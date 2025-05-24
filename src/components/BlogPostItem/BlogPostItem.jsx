@@ -3,6 +3,7 @@ import styles from "./BlogPostItem.module.css";
 
 const BlogPostItem = ({ id, title, summary, date, onSelect }) => {
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    timeZone: "UTC",
     year: "numeric",
     month: "long",
     day: "numeric",

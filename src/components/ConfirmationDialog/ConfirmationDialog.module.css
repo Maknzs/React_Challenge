@@ -1,101 +1,88 @@
-* {
-  font-family: Arial, sans-serif;
-}
-
+/* src/components/ConfirmationDialog/ConfirmationDialog.module.css */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .dialog {
-  background-color: #ffffff;
+  background: #ffffff;
   max-width: 400px;
   width: 90%;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 }
 
-.dialog h2 {
+h2 {
   font-size: 24px;
   font-weight: bold;
   color: #333333;
-  margin: 0 0 20px;
+  margin-bottom: 20px;
 }
 
-.dialog p {
+p {
   font-size: 16px;
   color: #666666;
-  margin: 0 0 30px;
+  margin-bottom: 30px;
 }
 
 .buttons {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .cancelButton {
-  color: black;
+  background: #cccccc;
+  color: #000000;
+  padding: 10px 20px;
+  border: none;
   font-size: 16px;
-  background-color: #cccccc;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  padding: 10px;
-  border-radius: 4px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
-}
-
-.cancelButton:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.cancelButton:focus {
-  outline: 1px solid #007bff;
-  outline-offset: 2px;
 }
 
 .deleteButton {
-  font-size: 16px;
-  background-color: #ff0000;
-  color: white;
+  background: #ff0000;
+  color: #ffffff;
+  padding: 10px 20px;
   border: none;
-  padding: 10px;
-  border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
 }
 
-.deleteButton:hover {
-  box-shadow: 0 4px 12px rgb(255, 0, 0);
-}
-
+.cancelButton:focus,
 .deleteButton:focus {
-  outline: 1px solid #007bff;
+  outline: 2px solid #007bff;
   outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
   .dialog {
     width: 90%;
+    padding: 20px;
   }
-  .dialog h2 {
+
+  h2 {
+    font-size: 20px;
     margin-bottom: 15px;
   }
-  .dialog p {
+
+  p {
+    font-size: 14px;
     margin-bottom: 20px;
   }
+
   .buttons {
-    width: fit-content;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 10px;
   }
 }
