@@ -1,4 +1,5 @@
 import React from "react";
+import DOMPurify from "dompurify";
 import styles from "./BlogPostDetail.module.css";
 
 const BlogPostDetail = ({ title, content, author, date }) => {
@@ -7,13 +8,15 @@ const BlogPostDetail = ({ title, content, author, date }) => {
   }
 
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
-    timeZone: "UTC",
     month: "long",
 
     day: "numeric",
 
     year: "numeric",
   });
+
+  // Sanitize content using DOMPurify
+  const sanitizedContent = DOMPurify.sanitize(content);
 
   return (
     <div className={styles.blogPostDetail}>
@@ -25,7 +28,7 @@ const BlogPostDetail = ({ title, content, author, date }) => {
 
       <div
         className={styles.content}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </div>
   );

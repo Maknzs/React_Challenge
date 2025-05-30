@@ -1,0 +1,16 @@
+* {
+  font-family: Arial, sans-serif;
+}
+
+.commentList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.noComments {
+  margin: 10px 0 0;
+  font-style: italic;
+  color: gray;
+}

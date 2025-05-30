@@ -1,6 +1,7 @@
+// src/__tests__/Layout.test.jsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Layout from "../Layout/Layout";
+import Layout from "../components/Layout/Layout";
 
 // Mock the NavBar component to avoid testing it here
 jest.mock("../components/NavBar/NavBar", () => () => <nav>MockNavBar</nav>);

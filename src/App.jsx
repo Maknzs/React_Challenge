@@ -12,7 +12,9 @@ import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
 import BlogPostForm from "./components/BlogPostForm/BlogPostForm";
 import DeleteButton from "./components/DeleteButton/DeleteButton";
 import ConfirmationDialog from "./components/ConfirmationDialog/ConfirmationDialog";
-import Layout from "./Layout/Layout";
+import Layout from "./components/Layout/Layout"; // ✅ NEW
+import CommentList from "./components/CommentList/CommentList";
+import CommentForm from "./components/CommentForm/CommentForm";
 
 const initialPosts = [
   {
@@ -79,30 +81,6 @@ const PostsPage = ({ posts }) => {
   const navigate = useNavigate();
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end", // Keeps it aligned to the right
-          marginBottom: "20px",
-        }}
-      >
-        <button
-          onClick={() => navigate("/posts/new")}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
-            fontSize: "14px",
-            cursor: "pointer",
-            marginRight: "40px", // Pushes button 40px from the right
-          }}
-        >
-          + New Post
-        </button>
-      </div>
-
       <BlogPostList posts={posts} onSelect={(id) => navigate(`/posts/${id}`)} />
     </div>
   );
@@ -120,6 +98,33 @@ const PostPage = ({ posts, setPosts }) => {
     navigate("/posts");
   };
 
+  const [comments, setComments] = useState([
+    {
+      id: "11111",
+      postId: "1",
+      name: "Alice",
+      text: "Great introduction to React!",
+      date: "2023-12-25T14:45:00Z",
+    },
+    {
+      id: "11112",
+      postId: "2",
+      name: "Bob",
+      text: "CSS Grid helped me structure my layout perfectly.",
+      date: "2024-01-05T09:30:00Z",
+    },
+  ]);
+
+  const postComments = comments.filter((c) => c.postId === id);
+
+  const handleCommentSubmit = (newComment) => {
+    setComments([
+      ...comments,
+      { ...newComment, postId: id, date: new Date().toISOString() },
+    ]);
+    console.log(newComment);
+  };
+
   if (!post) return <p>Blog post not found.</p>;
 
   return (
@@ -133,7 +138,7 @@ const PostPage = ({ posts, setPosts }) => {
           padding: "10px 15px",
           fontSize: "14px",
           marginRight: "40px",
-          marginTop: "20px",
+          marginTop: "45px",
           backgroundColor: "#007BFF",
           color: "#fff",
           border: "none",
@@ -148,6 +153,14 @@ const PostPage = ({ posts, setPosts }) => {
 
       <div style={{ marginTop: "30px", textAlign: "center" }}>
         <DeleteButton onClick={() => setIsDialogOpen(true)} />
+      </div>
+
+      <div>
+        <CommentList postComments={postComments} />
+      </div>
+
+      <div>
+        <CommentForm onSubmit={handleCommentSubmit} />
       </div>
 
       <ConfirmationDialog
@@ -211,7 +224,8 @@ const App = () => {
     <Router>
       <Layout>
         <div>
-          <h1>Blog Posts</h1>
+          <h2 style={{ textAlign: "center", marginTop: "20px" }}>Blog Posts</h2>
+
           <Routes>
             <Route path="/posts" element={<PostsPage posts={posts} />} />
             <Route

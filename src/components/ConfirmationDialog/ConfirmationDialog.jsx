@@ -1,14 +1,28 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./ConfirmationDialog.module.css";
 
-const ConfirmationDialog = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmationDialog = ({ isOpen, onClose, onConfirm, triggerRef }) => {
   const dialogRef = useRef(null);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       dialogRef.current?.focus();
+      window.addEventListener("keydown", handleKeyDown);
     }
-  }, [isOpen]);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (triggerRef?.current) {
+        triggerRef.current.focus();
+      }
+    };
+  }, [isOpen, onClose, triggerRef]);
 
   if (!isOpen) return null;
 
@@ -17,6 +31,7 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm }) => {
       <div
         className={styles.dialog}
         role="dialog"
+        aria-modal="true"
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
         ref={dialogRef}
@@ -24,14 +39,11 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="dialog-title">Confirm Deletion</h2>
-
         <p id="dialog-description">
           Are you sure you want to delete this post?
         </p>
-
         <div className={styles.buttons}>
           <button onClick={onClose}>Cancel</button>
-
           <button onClick={onConfirm}>Delete</button>
         </div>
       </div>

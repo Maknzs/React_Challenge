@@ -18,6 +18,10 @@ Participate in code reviews and collaborate with peers to improve the quality of
 *Description:*
 Develop a responsive navigation bar and overall layout, including a mobile-friendly menu (e.g., hamburger menu).
 
+# Part 2 - Challenge 1: Implement the Comment System
+*Description:*
+In this challenge, you will add a comment system to the blogging platform. Users should be able to view comments on each blog post and add new comments. The comment section must be responsive, adapting its layout based on the screen size (e.g., stacked comments on mobile, side-by-side on desktop).
+
 ## Steps to Run
 1. Visit the official Node.js website: https://nodejs.org
 2. Download the installer for your operating system (Windows, macOS, Linux) and follow the installation steps

@@ -20,7 +20,7 @@
     transition: color 0.3s ease;
   }
   
-  .postTitle h2 {
+  .postTitle h3 {
     margin: 0 0 10px 0;
     font-size: 24px;
     font-weight: bold;
