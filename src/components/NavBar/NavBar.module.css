@@ -21,6 +21,13 @@
   text-decoration: none;
 }
 
+.navContent {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  /* flex-grow: 1; */
+}
+
 .desktopLinks {
   display: flex;
   gap: 20px;

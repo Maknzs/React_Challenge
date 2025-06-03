@@ -12,7 +12,7 @@ import BlogPostDetail from "./components/BlogPostDetail/BlogPostDetail";
 import BlogPostForm from "./components/BlogPostForm/BlogPostForm";
 import DeleteButton from "./components/DeleteButton/DeleteButton";
 import ConfirmationDialog from "./components/ConfirmationDialog/ConfirmationDialog";
-import Layout from "./components/Layout/Layout"; // ✅ NEW
+import Layout from "./components/Layout/Layout";
 import CommentList from "./components/CommentList/CommentList";
 import CommentForm from "./components/CommentForm/CommentForm";
 
@@ -92,22 +92,14 @@ const PostPage = ({ posts, setPosts }) => {
   const post = posts.find((p) => p.id === id);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDelete = () => {
-    const updatedPosts = posts.filter((p) => p.id !== id);
-    setPosts(updatedPosts);
-    navigate("/posts");
-  };
-
   const [comments, setComments] = useState([
     {
-      id: "11111",
       postId: "1",
       name: "Alice",
       text: "Great introduction to React!",
       date: "2023-12-25T14:45:00Z",
     },
     {
-      id: "11112",
       postId: "2",
       name: "Bob",
       text: "CSS Grid helped me structure my layout perfectly.",
@@ -115,14 +107,21 @@ const PostPage = ({ posts, setPosts }) => {
     },
   ]);
 
-  const postComments = comments.filter((c) => c.postId === id);
+  const handleDelete = () => {
+    const updatedPosts = posts.filter((p) => p.id !== id);
+    setPosts(updatedPosts);
+    navigate("/posts");
+  };
 
-  const handleCommentSubmit = (newComment) => {
-    setComments([
-      ...comments,
-      { ...newComment, postId: id, date: new Date().toISOString() },
+  const handleAddComment = (comment) => {
+    setComments((prev) => [
+      ...prev,
+      {
+        ...comment,
+        postId: id,
+        date: new Date().toISOString(),
+      },
     ]);
-    console.log(newComment);
   };
 
   if (!post) return <p>Blog post not found.</p>;
@@ -155,19 +154,21 @@ const PostPage = ({ posts, setPosts }) => {
         <DeleteButton onClick={() => setIsDialogOpen(true)} />
       </div>
 
-      <div>
-        <CommentList postComments={postComments} />
-      </div>
-
-      <div>
-        <CommentForm onSubmit={handleCommentSubmit} />
-      </div>
-
       <ConfirmationDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onConfirm={handleDelete}
       />
+
+      <div style={{ marginTop: "40px" }}>
+        <h3 style={{ color: "#000" }}>Comments</h3>
+        <CommentList comments={comments.filter((c) => c.postId === id)} />
+        <CommentForm
+          onSubmit={handleAddComment}
+          isLoggedIn={false}
+          userName=""
+        />
+      </div>
     </div>
   );
 };
@@ -200,11 +201,15 @@ const EditPost = ({ posts, onUpdate }) => {
 
 const App = () => {
   const [posts, setPosts] = useState(initialPosts);
+  const [filteredPosts, setFilteredPosts] = useState(initialPosts);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleCreatePost = (newPost) => {
     const newId = (posts.length + 1).toString();
     const summary = stripHtml(newPost.content).slice(0, 60) + "...";
-    setPosts([...posts, { ...newPost, id: newId, summary }]);
+    const updated = [...posts, { ...newPost, id: newId, summary }];
+    setPosts(updated);
+    setFilteredPosts(updated);
   };
 
   const handleUpdatePost = (id, updatedPost) => {
@@ -218,16 +223,36 @@ const App = () => {
         : p
     );
     setPosts(updatedPosts);
+    setFilteredPosts(updatedPosts);
+  };
+
+  const handleSearch = (query) => {
+    setSearchTerm(query);
+    const lowerQuery = query.toLowerCase();
+    const results = posts.filter((post) => {
+      return (
+        post.title.toLowerCase().includes(lowerQuery) ||
+        post.summary.toLowerCase().includes(lowerQuery) ||
+        post.content.toLowerCase().includes(lowerQuery)
+      );
+    });
+    setFilteredPosts(query ? results : posts);
   };
 
   return (
     <Router>
-      <Layout>
+      <Layout onSearch={handleSearch}>
         <div>
           <h2 style={{ textAlign: "center", marginTop: "20px" }}>Blog Posts</h2>
-
+          ;
           <Routes>
-            <Route path="/posts" element={<PostsPage posts={posts} />} />
+            <Route
+              path="/posts"
+              element={
+                <PostsPage posts={filteredPosts} searchTerm={searchTerm} />
+              }
+            />
+
             <Route
               path="/posts/new"
               element={<CreatePost onCreate={handleCreatePost} />}

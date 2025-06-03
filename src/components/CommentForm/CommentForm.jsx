@@ -1,12 +1,12 @@
+// src/components/CommentForm/CommentForm.jsx
 import React, { useState } from "react";
 import styles from "./CommentForm.module.css";
 
 const CommentForm = ({ onSubmit, isLoggedIn, userName }) => {
   const [name, setName] = useState(userName || "");
   const [text, setText] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [error, setError] = useState([]);
-  // ...
+  const [avatar, setAvatar] = useState(""); 
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,26 +42,29 @@ const CommentForm = ({ onSubmit, isLoggedIn, userName }) => {
             onChange={(e) => setName(e.target.value)}
             required
           />
-
-          <label htmlFor="text">Comment</label>
-          <textarea
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            required
-          />
-
-          <label htmlFor="avatar">Avatar URL (optional)</label>
-          <input
-            id="avatar"
-            type="url"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-            placeholder="https://example.com/avatar.jpg"
-          />
         </div>
-        // ...
       )}
+
+      <div className={styles.fieldGroup}>
+        <label htmlFor="comment">Comment</label>
+        <textarea
+          id="comment"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className={styles.fieldGroup}>
+        <label htmlFor="avatar">Avatar URL (optional)</label>
+        <input
+          id="avatar"
+          type="url"
+          value={avatar}
+          onChange={(e) => setAvatar(e.target.value)}
+          placeholder="https://example.com/avatar.jpg"
+        />
+      </div>
 
       {error && <p className={styles.error}>{error}</p>}
 

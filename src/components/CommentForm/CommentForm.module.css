@@ -1,7 +1,4 @@
-* {
-  font-family: Arial, sans-serif;
-}
-
+/* src/components/CommentForm/CommentForm.module.css */
 .form {
   margin-top: 30px;
   display: flex;
@@ -31,6 +28,7 @@ input {
   width: 100%;
   padding: 0.5rem;
 }
+
 
 .error {
   color: red;

@@ -1,17 +1,16 @@
+// src/components/CommentList/CommentList.jsx
 import React from "react";
 import Comment from "../Comment/Comment";
 import styles from "./CommentList.module.css";
 
-const CommentList = ({ postComments }) => {
-  if (!postComments || postComments.length === 0) {
-    return (
-      <p className={styles.noComments}>No comments on this blog post yet.</p>
-    );
+const CommentList = ({ comments }) => {
+  if (!comments || comments.length === 0) {
+    return <p className={styles.noComments}>No comments yet.</p>;
   }
 
   return (
     <div className={styles.commentList} aria-live="polite">
-      {postComments.map((comment) => (
+      {comments.map((comment) => (
         <Comment
           key={comment.id}
           name={comment.name}

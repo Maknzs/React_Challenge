@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import SearchBar from "../SearchBar/SearchBar";
 
-const NavBar = () => {
+const NavBar = ({ onSearch }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -20,9 +21,12 @@ const NavBar = () => {
         Blog Application
       </Link>
 
-      <div className={styles.desktopLinks}>
-        <Link to="/posts">Home</Link>
-        <Link to="/posts/new">New Post</Link>
+      <div className={styles.navContent}>
+        <SearchBar onSearch={onSearch} />
+        <div className={styles.desktopLinks}>
+          <Link to="/posts">Home</Link>
+          <Link to="/posts/new">New Post</Link>
+        </div>
       </div>
 
       <button
